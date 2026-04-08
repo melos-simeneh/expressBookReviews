@@ -117,4 +117,17 @@ public_users.get('/async/isbn/:isbn', async function (req, res) {
   }
 });
 
+public_users.get('/async/author/:author', async function (req, res) {
+  const { author } = req.params;
+
+  try {
+    const response = await axios.get(`http://127.0.0.1:5000/author/${encodeURIComponent(author)}`);
+    return res.status(200).json(response.data);
+  } catch (error) {
+    const status = error.response?.status || 500;
+    const message = error.response?.data || { message: "Unable to fetch books by author asynchronously." };
+    return res.status(status).json(message);
+  }
+});
+
 module.exports.general = public_users;
