@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
@@ -92,6 +93,15 @@ public_users.get('/review/:isbn',function (req, res) {
   }
 
   return res.status(200).json(book.reviews);
+});
+
+public_users.get('/async/books', async function (req, res) {
+  try {
+    const response = await axios.get("http://127.0.0.1:5000/");
+    return res.status(200).json(response.data);
+  } catch (error) {
+    return res.status(500).json({ message: "Unable to fetch books asynchronously." });
+  }
 });
 
 module.exports.general = public_users;
